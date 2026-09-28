@@ -1,0 +1,131 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "permissions": [
+    // خواندن و نوشتن داخل این پروژه بدون پرسیدن اجازه انجام شود.
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "edit", "resource": "*", "effect": "allow" },
+
+    // فایلهای env قبل از خواندن/نوشتن از کاربر اجازه میگیرند.
+    { "action": "read", "resource": "*.env", "effect": "ask" },
+    { "action": "read", "resource": "*.env.*", "effect": "ask" },
+    { "action": "edit", "resource": "*.env", "effect": "ask" },
+    { "action": "edit", "resource": "*.env.*", "effect": "ask" },
+    // ولی نمونهی env آزاد است.
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+    { "action": "edit", "resource": "*.env.example", "effect": "allow" },
+
+    // فایل و پوشهی کانفیگ خود OpenCode همیشه باید اجازه بگیرند
+    // تا ایجنت نتواند با تغییر آنها به خودش دسترسی بدهد.
+    { "action": "edit", "resource": "*opencode.json", "effect": "ask" },
+    { "action": "edit", "resource": "*opencode.jsonc", "effect": "ask" },
+    { "action": "edit", "resource": "*.opencode/*", "effect": "ask" },
+
+    // خواندن و نوشتن خارج از این پروژه اول از کاربر اجازه میگیرد.
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
+
+    // ===== شل =====
+    // پیشفرض: هر دستور شل از کاربر اجازه میگیرد.
+    { "action": "shell", "resource": "*", "effect": "ask" },
+
+    // ابزارهای پرخطر و اجرای مستقیم کد: کلی میپرسند (allowهای بعدی میتوانند استثنا بزنند).
+    { "action": "shell", "resource": "rm *", "effect": "ask" },
+    { "action": "shell", "resource": "rmdir *", "effect": "ask" },
+    { "action": "shell", "resource": "mv *", "effect": "ask" },
+    { "action": "shell", "resource": "dd *", "effect": "ask" },
+    { "action": "shell", "resource": "chmod *", "effect": "ask" },
+    { "action": "shell", "resource": "chown *", "effect": "ask" },
+    { "action": "shell", "resource": "sudo *", "effect": "ask" },
+    { "action": "shell", "resource": "kill *", "effect": "ask" },
+    { "action": "shell", "resource": "pkill *", "effect": "ask" },
+    { "action": "shell", "resource": "curl *", "effect": "ask" },
+    { "action": "shell", "resource": "wget *", "effect": "ask" },
+    { "action": "shell", "resource": "ssh *", "effect": "ask" },
+    { "action": "shell", "resource": "scp *", "effect": "ask" },
+    { "action": "shell", "resource": "git push *", "effect": "ask" },
+    { "action": "shell", "resource": "npm publish *", "effect": "ask" },
+    { "action": "shell", "resource": "pnpm *", "effect": "ask" },
+    { "action": "shell", "resource": "npm *", "effect": "ask" },
+    { "action": "shell", "resource": "node *", "effect": "ask" },
+    { "action": "shell", "resource": "npx *", "effect": "ask" },
+
+    // دستورات بیخطر (خواندن + ساخت پوشه/فایل) خودکار مجاز.
+    { "action": "shell", "resource": "ls *", "effect": "allow" },
+    { "action": "shell", "resource": "pwd *", "effect": "allow" },
+    { "action": "shell", "resource": "cat *", "effect": "allow" },
+    { "action": "shell", "resource": "head *", "effect": "allow" },
+    { "action": "shell", "resource": "tail *", "effect": "allow" },
+    { "action": "shell", "resource": "wc *", "effect": "allow" },
+    { "action": "shell", "resource": "tree *", "effect": "allow" },
+    { "action": "shell", "resource": "stat *", "effect": "allow" },
+    { "action": "shell", "resource": "file *", "effect": "allow" },
+    { "action": "shell", "resource": "which *", "effect": "allow" },
+    { "action": "shell", "resource": "echo *", "effect": "allow" },
+    { "action": "shell", "resource": "find *", "effect": "allow" },
+    { "action": "shell", "resource": "fd *", "effect": "allow" },
+    { "action": "shell", "resource": "rg *", "effect": "allow" },
+    { "action": "shell", "resource": "grep *", "effect": "allow" },
+    { "action": "shell", "resource": "sort *", "effect": "allow" },
+    { "action": "shell", "resource": "uniq *", "effect": "allow" },
+    { "action": "shell", "resource": "cut *", "effect": "allow" },
+    { "action": "shell", "resource": "basename *", "effect": "allow" },
+    { "action": "shell", "resource": "dirname *", "effect": "allow" },
+    { "action": "shell", "resource": "realpath *", "effect": "allow" },
+    { "action": "shell", "resource": "mkdir *", "effect": "allow" },
+    { "action": "shell", "resource": "touch *", "effect": "allow" },
+
+    // git فقط حالت خواندنی.
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    { "action": "shell", "resource": "git branch *", "effect": "allow" },
+    { "action": "shell", "resource": "git remote *", "effect": "allow" },
+    { "action": "shell", "resource": "git ls-files *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-parse *", "effect": "allow" },
+
+    // pnpm/npm: سابکامندهای رایج پروژه مجاز (اجرای اسکریپتهای خود پروژه).
+    { "action": "shell", "resource": "pnpm install *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm i *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm add *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm remove *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm rm *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm update *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm run *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm lint *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm test *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm build *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm dev *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm start *", "effect": "allow" },
+    { "action": "shell", "resource": "pnpm format *", "effect": "allow" },
+    { "action": "shell", "resource": "npm install *", "effect": "allow" },
+    { "action": "shell", "resource": "npm i *", "effect": "allow" },
+    { "action": "shell", "resource": "npm ci *", "effect": "allow" },
+    { "action": "shell", "resource": "npm uninstall *", "effect": "allow" },
+    { "action": "shell", "resource": "npm update *", "effect": "allow" },
+    { "action": "shell", "resource": "npm run *", "effect": "allow" },
+    { "action": "shell", "resource": "npm test *", "effect": "allow" },
+
+    // --- گاردهای نهایی: بعد از همهی allowها میآیند تا همیشه برنده شوند ---
+    { "action": "shell", "resource": "*.env*", "effect": "ask" },
+    { "action": "shell", "resource": "find *-exec*", "effect": "ask" },
+    { "action": "shell", "resource": "find *-delete*", "effect": "ask" },
+    { "action": "shell", "resource": "*$(*", "effect": "ask" },
+    { "action": "shell", "resource": "*`*", "effect": "ask" },
+    { "action": "shell", "resource": "*>*", "effect": "ask" }
+  ],
+
+  // کامپکت خودکار وقتی مصرف کانتکست به ۲۵۶ هزار توکن رسید.
+  // این پروژه سقف مدل ۱٬۰۰۰٬۰۰۰ توکنی را به ۲۵۶٬۰۰۰ توکن محدود میکند.
+  // buffer = سقف_مدل − آستانه_هدف = 1000000 - 256000
+  "compaction": {
+    "auto": true,
+    "keep": { "tokens": 15000 },
+    "buffer": 744000
+  },
+
+  // پوشههای نادیدهگرفتهشده برای ردیابی تغییرات فایل.
+  "watcher": {
+    "ignore": ["node_modules/**"]
+  }
+}
